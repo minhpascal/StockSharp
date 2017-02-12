@@ -1,8 +1,6 @@
 namespace StockSharp.Quik.Lua
 {
 	using System;
-	using System.IO;
-	using System.Security;
 
 	using Ecng.Common;
 
@@ -12,12 +10,11 @@ namespace StockSharp.Quik.Lua
 
 	class LuaDialect : DefaultDialect
 	{
-		public LuaDialect(string senderCompId, string targetCompId, Stream stream, IncrementalIdGenerator idGenerator, TimeSpan heartbeatInterval, bool isResetCounter, string login, SecureString password, Func<OrderCondition> createOrderCondition)
-			: base(senderCompId, targetCompId, stream, idGenerator, heartbeatInterval, isResetCounter, login, password, TimeHelper.Moscow, createOrderCondition)
+		public LuaDialect(Func<OrderCondition> createOrderCondition)
+			: base(createOrderCondition)
 		{
-			SecurityLookup = true;
-			PortfolioLookup = true;
-			OrderLookup = true;
+			TimeZone = TimeHelper.Moscow;
+
 			SecuritiesSinglePacket = true;
 		}
 
@@ -52,7 +49,7 @@ namespace StockSharp.Quik.Lua
 		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
 		protected override void WriteOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
-			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition, TimeStampFormat);
+			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition, TimeStampParser);
 		}
 
 		/// <summary>
@@ -64,7 +61,7 @@ namespace StockSharp.Quik.Lua
 		/// <returns>Успешно ли обработаны данные.</returns>
 		protected override bool ReadOrderCondition(IFixReader reader, FixTags tag, Func<OrderCondition> getCondition)
 		{
-			return reader.ReadOrderCondition(tag, TimeZone, TimeStampFormat, () => (QuikOrderCondition)getCondition());
+			return reader.ReadOrderCondition(tag, TimeZone, TimeStampParser, () => (QuikOrderCondition)getCondition());
 		}
 	}
 }

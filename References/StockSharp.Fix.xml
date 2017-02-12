@@ -9,45 +9,72 @@
             Base class describing the dialect of the FIX protocol.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseDialect.#ctor(System.String,System.String,System.IO.Stream,System.Text.Encoding,Ecng.Common.IncrementalIdGenerator,System.String,StockSharp.Fix.FixFormats,System.TimeSpan,System.Boolean,System.String,System.Security.SecureString,System.TimeZoneInfo,System.String,System.String,System.String,System.String)">
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)">
       <summary>
             Initialize <see cref="T:StockSharp.Fix.Dialects.BaseDialect" />.
             </summary>
-      <param name="senderCompId">Sender ID.</param>
-      <param name="targetCompId">Target ID.</param>
-      <param name="stream">Stream.</param>
       <param name="encoding">Encoding.</param>
-      <param name="idGenerator">Sequence id generator.</param>
       <param name="version">FIX version.</param>
       <param name="format">FIX protocol format.</param>
-      <param name="heartbeatInterval">Heartbeat interval.</param>
-      <param name="isResetCounter">Should the number counter be cleared.</param>
-      <param name="login">Login.</param>
-      <param name="password">Password.</param>
-      <param name="timeZone">Information about the time zone where the exchange is located.</param>
-      <param name="timeStampFormat">UTC time stamp format.</param>
-      <param name="timeFormat">UTC time format.</param>
-      <param name="dateFormat">UTC date format.</param>
-      <param name="exchangeBoard">Board, where securities are traded.</param>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeStampFormat">
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.Encoding">
       <summary>
-            UTC time stamp format.
+            Encoding.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeFormat">
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.Login">
       <summary>
-            UTC time format.
+            Login.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseDialect.DateFormat">
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.Password">
       <summary>
-            UTC date format.
+            Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.SenderCompId">
+      <summary>
+            Sender ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TargetCompId">
+      <summary>
+            Target ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeStampParser">
+      <summary>
+            UTC time stamp parser.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeParser">
+      <summary>
+            UTC time parser.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.DateParser">
+      <summary>
+            UTC date parser.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.IsResetCounter">
+      <summary>
+            Should the number counter be cleared.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.HeartbeatInterval">
+      <summary>
+            Heartbeat interval.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeZone">
       <summary>
             Information about the time zone where the exchange is located.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.ExchangeBoard">
+      <summary>
+            Board, where securities are traded.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.HasPosition">
@@ -99,6 +126,14 @@
       <summary>
             Native identifier can be stored.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
+      <summary>
+            Initialize dialect.
+            </summary>
+      <param name="writer">The recorder of data in the FIX protocol format.</param>
+      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
+      <param name="idGenerator">Sequence id generator.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
       <summary>
@@ -174,24 +209,35 @@
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseDialect.DisposeManaged">
-      <summary>
-            Release resources.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.SecuritiesSinglePacket">
       <summary>
             Security message contain information for all requested securities.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,System.String,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.InitSecId(StockSharp.Messages.SecurityMessage,System.String,System.String,System.String,System.String)">
+      <summary>
+      </summary>
+      <param name="message">
+      </param>
+      <param name="symbol">
+      </param>
+      <param name="securityExchange">
+      </param>
+      <param name="idSource">
+      </param>
+      <param name="idValue">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,Ecng.Common.FastDateTimeParser,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
       <summary>
             Read the <see cref="F:StockSharp.Fix.Native.FixMessages.ExecutionReport" /> message.
             </summary>
       <param name="reader">The reader of data recorded in the FIX protocol format.</param>
       <param name="report">
         <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.</param>
-      <param name="transactTimeFormat">Format for <see cref="F:StockSharp.Fix.Native.FixTags.TransactTime" /> field.</param>
+      <param name="transactTimeParser">Parser for <see cref="F:StockSharp.Fix.Native.FixTags.TransactTime" /> field.</param>
       <param name="extraTagProcess">
       </param>
       <returns>
@@ -213,19 +259,10 @@
             The default implementation of <see cref="T:StockSharp.Fix.Dialects.IFixDialect" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.String,System.String,System.IO.Stream,Ecng.Common.IncrementalIdGenerator,System.TimeSpan,System.Boolean,System.String,System.Security.SecureString,System.TimeZoneInfo,System.Func{StockSharp.Messages.OrderCondition})">
+    <member name="M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.Func{StockSharp.Messages.OrderCondition})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.DefaultDialect" />.
             </summary>
-      <param name="senderCompId">Sender ID.</param>
-      <param name="targetCompId">Target ID.</param>
-      <param name="stream">Stream.</param>
-      <param name="idGenerator">Sequence id generator.</param>
-      <param name="heartbeatInterval">Heartbeat interval.</param>
-      <param name="isResetCounter">Should the number counter be cleared.</param>
-      <param name="login">Login.</param>
-      <param name="password">Password.</param>
-      <param name="timeZone">Information about the time zone where the exchange is located.</param>
       <param name="createOrderCondition">Order condition creating handler.</param>
     </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultDialect.ConvertToLatin">
@@ -273,14 +310,69 @@
             The interface describing the dialect of the FIX protocol.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Writer">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Encoding">
       <summary>
-            The recorder of data in the FIX protocol format.
+            Encoding.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Reader">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Format">
       <summary>
-            The reader of data recorded in the FIX protocol format.
+            FIX protocol format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SenderCompId">
+      <summary>
+            Sender ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TargetCompId">
+      <summary>
+            Target ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeStampParser">
+      <summary>
+            UTC time stamp parser.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeParser">
+      <summary>
+            UTC time parser.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.DateParser">
+      <summary>
+            UTC date parser.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter">
+      <summary>
+            Should the number counter be cleared.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.HeartbeatInterval">
+      <summary>
+            Heartbeat interval.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeZone">
+      <summary>
+            Information about the time zone where the exchange is located.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.ExchangeBoard">
+      <summary>
+            Board, where securities are traded.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SecurityLookup">
@@ -322,6 +414,14 @@
       <summary>
             Native identifier can be stored.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
+      <summary>
+            Initialize dialect.
+            </summary>
+      <param name="writer">The recorder of data in the FIX protocol format.</param>
+      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
+      <param name="idGenerator">Sequence id generator.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)">
       <summary>
@@ -564,19 +664,19 @@
             Information about the time zone where the exchange is located.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixSession.DateFormat">
+    <member name="P:StockSharp.Fix.FixSession.DateParser">
       <summary>
-            Date format.
+            Date parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixSession.DateTimeFormat">
+    <member name="P:StockSharp.Fix.FixSession.DateTimeParser">
       <summary>
-            Date and time format.
+            Date and time parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixSession.TimeFormat">
+    <member name="P:StockSharp.Fix.FixSession.TimeParser">
       <summary>
-            Time format.
+            Time parser.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixSession.ReadTimeout">
@@ -719,19 +819,19 @@
             </summary>
       <returns>The next tag. The -1 indicates the end of data.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDateTime(System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadTimeSpan(System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
@@ -912,21 +1012,21 @@
       <param name="value">
         <see cref="T:System.Decimal" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.DateTime,System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
       <summary>
             To record the <see cref="T:System.DateTime" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.TimeSpan,System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
             To record the <see cref="T:System.TimeSpan" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.String)">
       <summary>
@@ -3799,6 +3899,11 @@
             Maximum quantity (e.g. number of shares) within an order to be shown on the exchange floor at any given time.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.MassStatusReqId">
+      <summary>
+            Required if responding to and if provided on the <see cref="F:StockSharp.Fix.Native.FixMessages.OrderMassStatusRequest" /> message.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Price">
       <summary>
             Price per unit of quantity (e.g. per share).
@@ -3902,6 +4007,11 @@
     <member name="F:StockSharp.Fix.Native.ExecutionReport.ExecId">
       <summary>
             Unique identifier of execution message as assigned by sell-side (broker, exchange, ECN).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.OrdStatusReqId">
+      <summary>
+            Required if responding to and if provided on the <see cref="F:StockSharp.Fix.Native.FixMessages.OrderStatusRequest" /> message.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.FastPMap">
@@ -4473,6 +4583,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SecurityReqID">
       <summary>
       </summary>
@@ -4861,21 +4975,21 @@
       <param name="value">
         <see cref="T:System.Decimal" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.DateTime,System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
       <summary>
             To record the <see cref="T:System.DateTime" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.TimeSpan,System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
             To record the <see cref="T:System.TimeSpan" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.String)">
       <summary>
@@ -4977,19 +5091,19 @@
             </summary>
       <returns>The next tag. The -1 indicates the end of data.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDateTime(System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTimeSpan(System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
@@ -5086,21 +5200,21 @@
       <param name="value">
         <see cref="T:System.Decimal" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.DateTime,System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
       <summary>
             To record the <see cref="T:System.DateTime" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
             To record the <see cref="T:System.TimeSpan" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.String)">
       <summary>
@@ -5168,19 +5282,19 @@
             </summary>
       <returns>Data log.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDateTime(System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTimeSpan(System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
@@ -5309,12 +5423,11 @@
             </summary>
       <param name="message">Message.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateDialect(System.IO.Stream,Ecng.Common.IncrementalIdGenerator)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <summary>
             Create FIX protocol dialect.
             </summary>
-      <param name="stream">Stream.</param>
-      <param name="idGenerator">Sequence id generator.</param>
+      <param name="dialect">The FIX dialect.</param>
       <returns>The dialect.</returns>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.Address">

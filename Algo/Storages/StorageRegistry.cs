@@ -223,10 +223,10 @@ namespace StockSharp.Algo.Storages
 			protected abstract TMessage ToMessage(TEntity entity);
 		}
 
-		private sealed class TradeStorage : ConvertableStorage<ExecutionMessage, Trade, long>
+		private sealed class TradeStorage : ConvertableStorage<ExecutionMessage, Trade, DateTimeOffset>
 		{
 			public TradeStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.TradeId ?? 0, serializer, drive)
+				: base(security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.ServerTime.Truncate(), serializer, drive)
 			{
 			}
 
@@ -235,12 +235,22 @@ namespace StockSharp.Algo.Storages
 				var prevId = (long?)metaInfo.LastId;
 				var prevTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
 
+				if (prevId == 0)
+					prevId = null;
+
 				return data.Where(t =>
 				{
 					if (t.ServerTime > prevTime)
+					{
 						return true;
-					else if (t.ServerTime == prevTime && prevId != null)
-						return t.TradeId != prevId; // если разные сделки имеют одинаковое время
+					}
+					else if (t.ServerTime == prevTime)
+					{
+						if (prevId != null && t.TradeId != null)
+							return t.TradeId != prevId; // если разные сделки имеют одинаковое время
+						else
+							return true;
+					}
 					else
 						return false;
 				});
